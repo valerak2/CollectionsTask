@@ -1,30 +1,30 @@
 /**
- * Структура данных - ArrayList в классе Library,
- * потому что все остальные коллекции имеют неподходящую структуру
- * для хранения книг в библиотеке.
+ * Структуры данных - HashMap и HashMultimap(из библиотеки guava) в классе Library,
+ * Для максимальной скорости создаем 3 словаря,
+ * чтобы операции поиска по названию, автору и году издания выполнялись за O(1)
+ * Т.к у одного автора может быть несколько книг или в один год написано множество книг,
+ * то в этих случаях лучше использовать multimap, чтобы по одному ключу хранить множество значений.
  *
- * Операции добавления, удаления, поиска выполняются за O(n)
+ * Операции добавления, удаления выполняются за O(1)
+ *
+ * Операция поиска по временному интервалу выполняется за O(n),
+ * т.к сначала получаем список всех ключей, а затем пробегаемся по ним всем
+ * и ищем те, которые удовлетворяют нашему интревалу
  */
 public class Main {
     public static void main(String[] args) {
         Library library = new Library();
-        Book HarryPotter1 = new Book("Гарри Поттер и философский камень", "Джоан Роулинг", 1997);
-        Book HarryPotter2 = new Book("Гарри Поттер и Тайная комната", "Джоан Роулинг", 1998);
-        Book HarryPotter3 = new Book("Гарри Поттер и узник Азкабана", "Джоан Роулинг", 1999);
-        Book HarryPotter4 = new Book("Гарри Поттер и Кубок огня", "Джоан Роулинг", 2000);
-        Book HarryPotter5 = new Book("Гарри Поттер и Орден Феникса", "Джоан Роулинг", 2003);
-        Book HarryPotter6 = new Book("Гарри Поттер и Принц-полукровка", "Джоан Роулинг", 2005);
-        Book HarryPotter7 = new Book("Гарри Поттер и Дары Смерти", "Джоан Роулинг", 2007);
 
-        library.add(HarryPotter1);
-        library.add(HarryPotter2);
-        library.add(HarryPotter3);
-        library.add(HarryPotter4);
-        library.add(HarryPotter5);
-        library.add(HarryPotter6);
-        library.add(HarryPotter7);
+        library.add(new Book("Гарри Поттер и философский камень", "Джоан Роулинг", 1997));
+        library.add(new Book("Гарри Поттер и Тайная комната", "Джоан Роулинг", 1998));
+        library.add(new Book("Гарри Поттер и узник Азкабана", "Джоан Роулинг", 1999));
+        library.add(new Book("Гарри Поттер и Кубок огня", "Джоан Роулинг", 2000));
+        library.add(new Book("Гарри Поттер и Орден Феникса", "Джоан Роулинг", 2003));
+        library.add(new Book("Гарри Поттер и Принц-полукровка", "Джоан Роулинг", 2005));
+        library.add(new Book("Гарри Поттер и Дары Смерти", "Джоан Роулинг", 2007));
 
         System.out.println(library.findByYear(2000));
+        System.out.println(library.findByTitle("Гарри Поттер"));
         System.out.println(library.findByAuthor("Джоан Роулинг"));
         System.out.println(library.findAllByYearPeriod(2001, 2010));
     }

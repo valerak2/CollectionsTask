@@ -1,40 +1,49 @@
+import com.google.common.collect.HashMultimap;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class Library {
-    private final ArrayList<Book> library = new ArrayList<>();
+    private final HashMultimap<String, Book> authorOnBook = HashMultimap.create();
+    private final HashMap<String, Book> titleOnBook = new HashMap<>();
+    private final HashMultimap<Integer, Book> yearOnBook = HashMultimap.create();
+
 
     public void add(Book book) {
-        library.add(book);
+        authorOnBook.put(book.author(), book);
+        titleOnBook.put(book.title(), book);
+        yearOnBook.put(book.year(), book);
     }
 
     public void remove(Book book) {
-        library.remove(book);
+        authorOnBook.remove(book.author(), book);
+        titleOnBook.remove(book.title(), book);
+        yearOnBook.remove(book.year(), book);
+
     }
 
-    public List<Book> findByAuthor(String author) {
-        return library.stream()
-                .filter(book -> book.author().equals(author))
-                .toList();
+    public Set<Book> findByAuthor(String author) {
+        return authorOnBook.get(author);
     }
 
-    public List<Book> findByTitle(String title) {
-        return library.stream()
-                .filter(book -> book.title().equals(title))
-                .toList();
+    public Book findByTitle(String title) {
+        return titleOnBook.get(title);
     }
 
 
-    public List<Book> findByYear(int year) {
-        return library.stream()
-                .filter(book -> book.year() == year)
-                .toList();
+    public Set<Book> findByYear(int year) {
+        return yearOnBook.get(year);
     }
 
     public List<Book> findAllByYearPeriod(int fromYear, int toYear) {
-        return library.stream()
-                .filter(book -> fromYear <= book.year() & book.year() <= toYear)
-                .toList();
+        List<Book> bookList = new ArrayList<>();
+        for (Integer year : yearOnBook.asMap().keySet()) {
+            if (fromYear <= year & year <= toYear)
+                bookList.addAll(yearOnBook.get(year));
+        }
+        return bookList;
     }
 }
 
