@@ -12,11 +12,10 @@ public class ManagementSystem {
         linkedBlockingQueue.add(function);
     }
 
-    public void getResult() throws InterruptedException {
-        System.out.println(linkedBlockingQueue.take().isReady);
-//        assert linkedBlockingQueue.peek() != null;
-//        if (linkedBlockingQueue.peek().isReady) System.out.println("Задача выполнена");
-//        else System.out.println("Задача еще не готова");
+    public void getResult() {
+        assert linkedBlockingQueue.peek() != null;
+        if (linkedBlockingQueue.peek().isReady) System.out.println("Задача выполнена");
+        else System.out.println("Задача еще не готова");
 
     }
 
