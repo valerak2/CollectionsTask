@@ -1,31 +1,32 @@
-import com.google.common.collect.HashMultimap;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Library {
-    private final HashMultimap<String, Book> authorOnBook = HashMultimap.create();
-    private final HashMap<String, Book> titleOnBook = new HashMap<>();
-    private final HashMultimap<Integer, Book> yearOnBook = HashMultimap.create();
-
+    private final Map<String, Map<String, Book>> authorOnBook = new HashMap<>();
+    private final Map<String, Book> titleOnBook = new HashMap<>();
+    private final Map<String, Map<String, Book>> yearOnBook = new HashMap<>();
 
     public void add(Book book) {
-        authorOnBook.put(book.author(), book);
+        addValue(authorOnBook, book.author(), book);
+        addValue(yearOnBook, String.valueOf(book.year()), book);
         titleOnBook.put(book.title(), book);
-        yearOnBook.put(book.year(), book);
+    }
+
+    private void addValue(Map<String, Map<String, Book>> map, String key, Book book) {
+        Map<String, Book> internalMap = map.containsKey(key) ? map.get(key) : new HashMap<>();
+        internalMap.put(book.title(), book);
+        map.put(key, internalMap);
+
     }
 
     public void remove(Book book) {
-        authorOnBook.remove(book.author(), book);
+        authorOnBook.get(book.author()).remove(book.author());
+        authorOnBook.get(String.valueOf(book.year())).remove(book.author());
         titleOnBook.remove(book.title(), book);
-        yearOnBook.remove(book.year(), book);
 
     }
 
-    public Set<Book> findByAuthor(String author) {
-        return authorOnBook.get(author);
+    public Collection<Book> findByAuthor(String author) {
+        return authorOnBook.get(author).values();
     }
 
     public Book findByTitle(String title) {
@@ -33,15 +34,15 @@ public class Library {
     }
 
 
-    public Set<Book> findByYear(int year) {
-        return yearOnBook.get(year);
+    public Collection<Book> findByYear(int year) {
+        return yearOnBook.get(String.valueOf(year)).values();
     }
 
     public List<Book> findAllByYearPeriod(int fromYear, int toYear) {
         List<Book> bookList = new ArrayList<>();
-        for (Integer year : yearOnBook.asMap().keySet()) {
-            if (fromYear <= year & year <= toYear)
-                bookList.addAll(yearOnBook.get(year));
+        for (int year = fromYear; year <= toYear; year++) {
+            if (yearOnBook.containsKey(String.valueOf(year)))
+                bookList.addAll(yearOnBook.get(String.valueOf(year)).values());
         }
         return bookList;
     }
