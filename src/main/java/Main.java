@@ -1,28 +1,34 @@
-import java.util.concurrent.TimeUnit;
 
 /**
  * Структура данных - LinkedBlockingQueue (в классе ManagementSystem)
  * Т.к нам нужно выводить результаты задачи в порядке их поступления,
  * т.е в порядке очереди,
  * и еще нужна потокобезопасность.
- *
- * Операция получения результата, если задача выполнена, О(1),
- * если задача не выполнена, то ждем какое-то константное время
- * и снова обращаемся за результатом и в итоге опять О(1)*/
+ * <p>
+ * Реализация интерфейса Queue обеспечивает получения первого элемента за O(1)
+
+ */
 public class Main {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         ManagementSystem calculationManagementSystem = new ManagementSystem();
-        FunctionExample1 function1 = new FunctionExample1();
-        FunctionExample2 function2 = new FunctionExample2();
+
+        double depositAmount = 100;
+        int termOfPlacement = 12;
+        double rateOfInterest = 0.12;
+        calculationOfBankDeposits function1 =
+                new calculationOfBankDeposits(depositAmount, termOfPlacement, rateOfInterest);
+
+        double requestedAmount = 100000;
+        rateOfInterest = 0.95;
+        calculationOfBankCredits function2 = new calculationOfBankCredits(requestedAmount, rateOfInterest);
+
         calculationManagementSystem.addFunction(function1);
         calculationManagementSystem.addFunction(function2);
 
-        calculationManagementSystem.getResult();
+        calculationManagementSystem.printResultOnTask();
+        calculationManagementSystem.printResultOnTask();
 
-        TimeUnit.SECONDS.sleep(4);
-        calculationManagementSystem.getResult();
-        calculationManagementSystem.getResult();
 
     }
 }
