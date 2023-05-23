@@ -1,7 +1,8 @@
 import java.util.HashMap;
+import java.util.Map;
 
 public class Bartender {
-    private final HashMap<Ticket,String> listOfOrders = new HashMap<>();
+    private final Map<Ticket,String> listOfOrders = new HashMap<>();
 
     public void newOrder(Ticket ticket, String setProducts){
         listOfOrders.put(ticket, setProducts);
